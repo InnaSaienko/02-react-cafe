@@ -1,6 +1,7 @@
 import css from "./VoteOptions.module.css";
 import type {VoteOptionsProps, VoteType} from "../../types/votes.ts";
 import type {ReactElement} from "react";
+import clsx from 'clsx';
 
 const VoteOptions = ({onVote, onReset}: VoteOptionsProps): ReactElement => {
     const options: VoteType[] = ["good", "neutral", "bad"];
@@ -16,7 +17,7 @@ const VoteOptions = ({onVote, onReset}: VoteOptionsProps): ReactElement => {
                     {option}
                 </button>
             ))}
-            <button className={`${css.button} ${css.reset}`} onClick={onReset}>Reset</button>
+            <button className={clsx(css.button, css.reset)} onClick={onReset}>Reset</button>
         </div>
     )
 }
