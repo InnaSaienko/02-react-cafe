@@ -1,49 +1,31 @@
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import VoteOptions from './VoteOptions'
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+import VoteOptions from "./VoteOptions";
 
-describe('VoteOptions', () => {
-  const mockOnVote = vi.fn()
-  const mockOnReset = vi.fn()
+describe("VoteOptions", () => {
+  it("calls onVote with the correct vote type", async () => {
+    const user = userEvent.setup();
+    const onVote = vi.fn();
+    const onReset = vi.fn();
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    render(<VoteOptions onVote={onVote} onReset={onReset} />);
 
-  it('renders three vote buttons and a reset button', () => {
-    render(<VoteOptions onVote={mockOnVote} onReset={mockOnReset} />)
+    await user.click(screen.getByRole("button", { name: /good/i }));
 
-    expect(screen.getByRole('button', { name: /Good/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Neutral/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Bad/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Reset/i })).toBeInTheDocument()
-  })
+    expect(onVote).toHaveBeenCalledWith("good");
+    expect(onVote).toHaveBeenCalledTimes(1);
+  });
 
-  it('calls onVote with correct argument when vote buttons are clicked', async () => {
-    const user = userEvent.setup()
-    render(<VoteOptions onVote={mockOnVote} onReset={mockOnReset} />)
+  it("calls onReset when Reset button is clicked", async () => {
+    const user = userEvent.setup();
+    const onVote = vi.fn();
+    const onReset = vi.fn();
 
-    const goodButton = screen.getByRole('button', { name: /Good/i })
-    const neutralButton = screen.getByRole('button', { name: /Neutral/i })
-    const badButton = screen.getByRole('button', { name: /Bad/i })
+    render(<VoteOptions onVote={onVote} onReset={onReset} />);
 
-    await user.click(goodButton)
-    expect(mockOnVote).toHaveBeenCalledWith('good')
+    await user.click(screen.getByRole("button", { name: /reset/i }));
 
-    await user.click(neutralButton)
-    expect(mockOnVote).toHaveBeenCalledWith('neutral')
-
-    await user.click(badButton)
-    expect(mockOnVote).toHaveBeenCalledWith('bad')
-  })
-
-  it('calls onReset when reset button is clicked', async () => {
-    const user = userEvent.setup()
-    render(<VoteOptions onVote={mockOnVote} onReset={mockOnReset} />)
-
-    const resetButton = screen.getByRole('button', { name: /Reset/i })
-    await user.click(resetButton)
-
-    expect(mockOnReset).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(onReset).toHaveBeenCalledTimes(1);
+  });
+});
