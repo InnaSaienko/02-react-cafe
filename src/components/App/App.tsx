@@ -18,6 +18,7 @@ function App() {
     const positiveRate = totalVotes
         ? Math.round((votes.good / totalVotes) * 100)
         : 0;
+    const canReset = totalVotes > 0;
 
     const handleVote = (vote: VoteType) => {
         setVotes(prev => ({
@@ -28,9 +29,8 @@ function App() {
 
     return (
         <div className={css.app}>
-            {totalVotes}
             <CafeInfo/>
-            <VoteOptions onVote={handleVote} onReset={() => setVotes(DEFAULT_VOTES)}/>
+            <VoteOptions onVote={handleVote} onReset={() => setVotes(DEFAULT_VOTES)} canReset={canReset} />
             <VoteStats votes={votes} totalVotes={totalVotes} positiveRate={positiveRate}/>
         </div>
     )

@@ -22,10 +22,28 @@ describe("VoteOptions", () => {
     const onVote = vi.fn();
     const onReset = vi.fn();
 
-    render(<VoteOptions onVote={onVote} onReset={onReset} />);
+    render(<VoteOptions onVote={onVote} onReset={onReset} canReset={true} />);
 
     await user.click(screen.getByRole("button", { name: /reset/i }));
 
     expect(onReset).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not render reset button when canReset is false", () => {
+    const onVote = vi.fn();
+    const onReset = vi.fn();
+
+    render(<VoteOptions onVote={onVote} onReset={onReset} canReset={false} />);
+
+    expect(screen.queryByRole("button", { name: /reset/i })).not.toBeInTheDocument();
+  });
+
+  it("renders reset button by default when canReset is not provided", () => {
+    const onVote = vi.fn();
+    const onReset = vi.fn();
+
+    render(<VoteOptions onVote={onVote} onReset={onReset} />);
+
+    expect(screen.getByRole("button", { name: /reset/i })).toBeInTheDocument();
   });
 });
