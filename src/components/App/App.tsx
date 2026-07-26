@@ -4,6 +4,7 @@ import type {Votes, VoteType} from "../../types/votes.ts";
 import CafeInfo from "../CafeInfo/CafeInfo.tsx";
 import VoteOptions from "../VoteOptions/VoteOptions.tsx";
 import VoteStats from "../VoteStats/VoteStats.tsx";
+import Notification from "../Notification/Notification.tsx";
 
 const DEFAULT_VOTES = {
     good: 0,
@@ -31,7 +32,11 @@ function App() {
         <div className={css.app}>
             <CafeInfo/>
             <VoteOptions onVote={handleVote} onReset={() => setVotes(DEFAULT_VOTES)} canReset={canReset} />
-            <VoteStats votes={votes} totalVotes={totalVotes} positiveRate={positiveRate}/>
+            {canReset ? (
+                <VoteStats votes={votes} totalVotes={totalVotes} positiveRate={positiveRate}/>
+            ) : (
+                <Notification />
+            )}
         </div>
     )
 }
